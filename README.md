@@ -2,7 +2,7 @@
 
 # file converter
 
-Current audit update: **v1.0.15**. Includes app-specific bug fixes, bounded offline regression/performance tests, and shared setup hardening.
+Current audit update: **v1.0.15**. Includes app-specific bug fixes and shared setup hardening.
 
 All Fleece desktop tools use the same installation workflow: download the official ZIP, extract the entire folder, run `Installer.bat`, accept the bundled Terms/Tool License, wait for final checks, then open the folder-local shortcut. Setup installs a private runtime without changing system Python or requiring administrator access. Rerun it to repair or refresh a moved shortcut. Keep the full path at most 72 characters, without percent signs. Architecture support and extra components vary by tool; File Converter remains x64-only.
 
@@ -87,8 +87,6 @@ BAT/CMD and PY/PYW conversions only change the extension. They do not translate 
 Click **Cancel** to stop a job. Media probing and conversion stop their private child processes; image codecs and some archive operations may need to finish their current codec call before cancellation completes. Wait for the app to return to its idle state before closing it. Failed or cancelled jobs leave existing output files unchanged.
 
 Installed components work offline. Repairing missing or damaged components with `Installer.bat` can require an internet connection; an offline conversion error is not a reason to upload the input file anywhere.
-
-For an additional reproducible offline regression check, run `.runtime\python\python.exe -I scripts\Test-AppOffline.py` from the extracted folder. It uses generated files in disposable temporary folders, does not use your files, and does not install or download anything. The bundled setup self-test remains the exact dependency and all-format installation check.
 
 ## license
 
