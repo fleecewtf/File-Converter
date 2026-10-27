@@ -97,9 +97,13 @@ set "PYTHON_PACKAGES=%PYSIDE_DISTRIBUTION%==%PYSIDE_VERSION% shiboken6==%SHIBOKE
 set "PYPI_INDEX=https://pypi.org/simple"
 set "PIP_WHEEL_URL=https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl"
 set "PIP_WHEEL_SHA256=71138ADF1F4CA900CDB7D289C21B7494329F2332B6D85F0E1C42108C0384ED3E"
-set "FFMPEG_VERSION=9.0.2"
-set "FFMPEG_URL=https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-essentials_build.zip"
-set "FFMPEG_SHA256=60F467265B1E312373DBCD92200C2618A74850F98D3D078E94296BB3FA2047BA"
+set "FFMPEG_VERSION=n9.0.2-36-g6882969ce9-20261026"
+set "FFMPEG_URL=https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-10-26-14-25/ffmpeg-n9.0.2-36-g6882969ce9-win64-gpl-9.0.zip"
+set "FFMPEG_SHA256=10A8E6C92D82AB5AF285E736F63A871DB30568D311B33A87B0ECB2477CEB8292"
+set "FFMPEG_EXE_SHA256=10B9E38681AC8F73109291EDBD88AEA2E3F32CE04B562D1A6DF679D76F455910"
+set "FFPROBE_EXE_SHA256=BC7540799B82E4F92F6273147014BA37B6C2C8A1B2BE0477EFD56CAFD2D1B93E"
+set "FFMPEG_LICENSE_SHA256=8CEB4B9EE5ADEDDE47B31E975C1D90C73AD27B6B165A1DCD80C7C545EB65B903"
+set "FFMPEG_SOURCE_MANIFEST=%ROOT%FFMPEG-SOURCES.txt"
 
 set "NATIVE_ARCH=%PROCESSOR_ARCHITECTURE%"
 if defined PROCESSOR_ARCHITEW6432 set "NATIVE_ARCH=%PROCESSOR_ARCHITEW6432%"
@@ -135,6 +139,11 @@ if errorlevel 1 (
 if not exist "%ROOT%LICENSE" (
     set "FAIL_MESSAGE=The bundled Tool License is missing from this folder. Extract a fresh official release and try again."
     set "REPAIR_HINT=Extract the entire official ZIP again; keep Installer.bat and LICENSE together."
+    goto Failed
+)
+if not exist "%FFMPEG_SOURCE_MANIFEST%" (
+    set "FAIL_MESSAGE=The bundled FFmpeg source and license notice is missing."
+    set "REPAIR_HINT=Extract the entire official ZIP again, including FFMPEG-SOURCES.txt, then retry."
     goto Failed
 )
 "%POWERSHELL_EXE%" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "if([IO.Path]::GetFullPath($env:ROOT).Length -gt [int]$env:MAX_ROOT_LENGTH){exit 2}" >nul 2>nul
@@ -781,6 +790,11 @@ exit /b %ERRORLEVEL%
 :ValidateFfmpeg
 if not exist "%FFMPEG_EXE%" exit /b 1
 if not exist "%FFPROBE_EXE%" exit /b 1
+if not exist "%FFMPEG_DIR%\LICENSE.txt" exit /b 1
+if not exist "%FFMPEG_DIR%\FFMPEG-SOURCES.txt" exit /b 1
+if not exist "%FFMPEG_DIR%\BUILD-CONFIG.txt" exit /b 1
+"%POWERSHELL_EXE%" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $digest={param($path) $stream=[IO.File]::OpenRead($path); $sha=[Security.Cryptography.SHA256]::Create(); try{([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-','')}finally{$stream.Dispose();$sha.Dispose()}}; $expected=@{($env:FFMPEG_EXE)=$env:FFMPEG_EXE_SHA256;($env:FFPROBE_EXE)=$env:FFPROBE_EXE_SHA256;([IO.Path]::Combine($env:FFMPEG_DIR,'LICENSE.txt'))=$env:FFMPEG_LICENSE_SHA256}; foreach($p in $expected.Keys){$item=Get-Item -LiteralPath $p -Force; if($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)){throw 'Unsafe FFmpeg file'}; if((& $digest $p) -ne $expected[$p]){throw 'FFmpeg component SHA-256 mismatch'}}; $notice=Join-Path $env:FFMPEG_DIR 'FFMPEG-SOURCES.txt'; if((& $digest $notice) -ne (& $digest $env:FFMPEG_SOURCE_MANIFEST)){throw 'FFmpeg source notice mismatch'}" >>"%LOG%" 2>&1
+if errorlevel 1 exit /b 1
 set "FFMPEG_CHECK=%RUNTIME%\ffmpeg-check.txt"
 "%FFMPEG_EXE%" -version >"%FFMPEG_CHECK%" 2>&1
 if errorlevel 1 exit /b 1
@@ -810,7 +824,7 @@ if exist "%FFMPEG_NEW%" exit /b 1
 set "ARCHIVE_FILE=%FFMPEG_ARCHIVE%"
 set "EXTRACT_DIR=%FFMPEG_EXTRACT%"
 set "NEW_DIR=%FFMPEG_NEW%"
-"%POWERSHELL_EXE%" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; Expand-Archive -LiteralPath $env:ARCHIVE_FILE -DestinationPath $env:EXTRACT_DIR -Force; $ff=Get-ChildItem -LiteralPath $env:EXTRACT_DIR -Filter ffmpeg.exe -File -Recurse | Select-Object -First 1; $fp=Get-ChildItem -LiteralPath $env:EXTRACT_DIR -Filter ffprobe.exe -File -Recurse | Select-Object -First 1; if(-not $ff -or -not $fp){throw 'FFmpeg archive did not contain both required programs.'}; New-Item -ItemType Directory -Path $env:NEW_DIR -Force | Out-Null; Copy-Item -LiteralPath $ff.FullName -Destination (Join-Path $env:NEW_DIR 'ffmpeg.exe') -Force; Copy-Item -LiteralPath $fp.FullName -Destination (Join-Path $env:NEW_DIR 'ffprobe.exe') -Force" >>"%LOG%" 2>&1
+"%POWERSHELL_EXE%" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; Expand-Archive -LiteralPath $env:ARCHIVE_FILE -DestinationPath $env:EXTRACT_DIR -Force; $package=Join-Path $env:EXTRACT_DIR 'ffmpeg-n9.0.2-36-g6882969ce9-win64-gpl-9.0'; New-Item -ItemType Directory -Path $env:NEW_DIR -Force | Out-Null; foreach($name in @('ffmpeg.exe','ffprobe.exe')){Copy-Item -LiteralPath (Join-Path $package ('bin\'+$name)) -Destination (Join-Path $env:NEW_DIR $name) -Force}; Copy-Item -LiteralPath (Join-Path $package 'LICENSE.txt') -Destination (Join-Path $env:NEW_DIR 'LICENSE.txt') -Force; Copy-Item -LiteralPath $env:FFMPEG_SOURCE_MANIFEST -Destination (Join-Path $env:NEW_DIR 'FFMPEG-SOURCES.txt') -Force; $process=Start-Process -FilePath (Join-Path $env:NEW_DIR 'ffmpeg.exe') -ArgumentList '-buildconf' -WindowStyle Hidden -Wait -PassThru -RedirectStandardError (Join-Path $env:NEW_DIR 'BUILD-CONFIG.txt'); if($process.ExitCode -ne 0){throw 'FFmpeg build configuration could not be read'}" >>"%LOG%" 2>&1
 if errorlevel 1 exit /b 1
 set "OLD_FFMPEG_DIR=%FFMPEG_DIR%"
 set "FFMPEG_DIR=%FFMPEG_NEW%"

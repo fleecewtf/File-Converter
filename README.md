@@ -2,9 +2,11 @@
 
 # file converter
 
-Current audit update: **v1.0.15**. Includes app-specific bug fixes and shared setup hardening.
+Current release: **v1.0.16**. Includes pinned FFmpeg binary verification and its matching source and license notices.
 
-All Fleece desktop tools use the same installation workflow: download the official ZIP, extract the entire folder, run `Installer.bat`, accept the bundled Terms/Tool License, wait for final checks, then open the folder-local shortcut. Setup installs a private runtime without changing system Python or requiring administrator access. Rerun it to repair or refresh a moved shortcut. Keep the full path at most 72 characters, without percent signs. Architecture support and extra components vary by tool; File Converter remains x64-only.
+**Small installer:** Download the small installer ZIP, extract the entire folder, run `Installer.bat`, accept the Terms and bundled Tool License, wait for final checks, then open the folder-local shortcut. Setup keeps its runtime private without changing system Python or PATH or requiring administrator access. Rerun it to repair or refresh a moved shortcut. Keep the full path at most 72 characters, without percent signs. The small installer retains this tool's documented architecture support; File Converter remains x64-only.
+
+**Ready-to-run (Windows x64):** A larger ZIP includes the private runtime already bundled. Extract the entire folder, open `File Converter.exe`, and accept the Terms and bundled Tool License on first use. There is no `Installer.bat` step and no system Python or PATH change. Keep the EXE with the rest of the folder. This option is x64, not native ARM64; the setup instructions below describe the small installer option.
 
 A little tool I made with AI to quickly convert common image, audio, video, archive, and script files locally on 64-bit Windows.
 
@@ -69,6 +71,8 @@ The original input is never overwritten. Animation is preserved when the output 
 - [py7zr](https://py7zr.readthedocs.io/)
 - [FFmpeg](https://ffmpeg.org/)
 - [Python](https://www.python.org/)
+
+The FFmpeg/FFprobe runtime uses the pinned BtbN GPLv3 build identified in [FFMPEG-SOURCES.txt](FFMPEG-SOURCES.txt). Its exact corresponding source, dependency sources, and build recipes are available from the linked public source release. These third-party components retain their licenses and are not restricted by Fleece's app license.
 
 ## privacy and removal
 

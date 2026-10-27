@@ -1,0 +1,63 @@
+FFMPEG AND FFPROBE: THIRD-PARTY LICENSE AND MATCHING SOURCE
+
+These separate command-line programs are FFmpeg, copyright the FFmpeg
+developers and contributors. This distribution uses a BtbN build with GPL
+components enabled. It is licensed under GNU GPL version 3 or later. Its full
+GPL text is retained as .runtime\ffmpeg\LICENSE.txt after setup and is bundled
+there in the ready-to-run download. Its build configuration is retained as
+.runtime\ffmpeg\BUILD-CONFIG.txt.
+
+Fleece's proprietary app license does not restrict your rights in FFmpeg,
+FFprobe, their corresponding source, or other separately licensed components.
+The Fleece Python UI communicates with these executables as separate processes.
+No warranty is provided for FFmpeg; see the complete GNU GPL text.
+
+PINNED BINARY
+
+Upstream project: https://ffmpeg.org/
+Build publisher: https://github.com/BtbN/FFmpeg-Builds
+Upstream release:
+https://github.com/BtbN/FFmpeg-Builds/releases/tag/autobuild-2026-10-26-14-25
+Archive: ffmpeg-n9.0.2-36-g6882969ce9-win64-gpl-9.0.zip
+Archive SHA-256:
+10a8e6c92d82ab5af285e736f63a871db30568d311b33a87b0ecb2477ceb8292
+Version banner: n9.0.2-36-g6882969ce9-20261026
+Architecture: Windows x64, static GPL build, target win64 gpl 9.0
+
+ffmpeg.exe SHA-256:
+10b9e38681ac8f73109291edbd88aea2e3f32ce04b562d1a6df679d76f455910
+ffprobe.exe SHA-256:
+bc7540799b82e4f92f6273147014ba37b6c2c8a1b2be0477efd56cafd2d1b93e
+
+DIRECT PUBLIC CORRESPONDING-SOURCE ACCESS
+
+https://github.com/fleecewtf/File-Converter/releases/tag/ffmpeg-9.0.2-btbn-20261026
+
+That public source release is shared by File Converter and Video + Audio
+Downloader when they distribute the exact binary digests above. It provides:
+
+* The exact FFmpeg source at commit
+  6882969ce9fd2aa6aa1d0008b2bfe1c838aac11d.
+* BtbN build scripts, patches, recipes, Dockerfiles, and variants at commit
+  b4a2b1d7cc241786eb8e2b588a7ade40cad48bbd.
+* The dependency-source download cache retained from BtbN Actions run
+  40338630151, artifact 12659991135, split into downloadable parts if needed.
+* SHA-256 checksums, exact source/build provenance, and reassembly directions.
+
+Sources are available by direct network download, without a private repository,
+Fleece account, or purchase. This is direct source distribution, not a written
+source offer. The source release must remain available while Fleece offers the
+corresponding binary.
+
+UPSTREAM SOURCE AND BUILD REFERENCES
+
+https://github.com/FFmpeg/FFmpeg/tree/6882969ce9fd2aa6aa1d0008b2bfe1c838aac11d
+https://github.com/BtbN/FFmpeg-Builds/tree/b4a2b1d7cc241786eb8e2b588a7ade40cad48bbd
+https://github.com/BtbN/FFmpeg-Builds/actions/runs/40338630151
+https://www.gnu.org/licenses/gpl-3.0.html
+
+Third-party dependency copyrights and license texts are retained in their
+corresponding source archives. The exact build recipes identify the selected
+versions and patches. Fleece does not claim to have authored or compiled this
+upstream binary.
+

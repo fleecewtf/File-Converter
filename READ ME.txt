@@ -1,6 +1,7 @@
 FILE CONVERTER
 
-AUDIT UPDATE v1.0.15
+RELEASE v1.0.16
+Includes pinned FFmpeg binary verification and matching source and license notices.
 Shared setup: extract the complete official ZIP, run Installer.bat, accept the
 bundled Terms/Tool License, wait for every final check, then use the folder-local
 shortcut. Setup needs no administrator access and keeps Python private.
@@ -49,6 +50,11 @@ Before downloading private components, setup checks the bundled app source and W
 The original input is never overwritten. BAT/CMD and PY/PYW conversions only change the extension and do not translate script contents.
 
 LICENSE
+
+The FFmpeg/FFprobe runtime uses the pinned BtbN GPLv3 build identified in
+FFMPEG-SOURCES.txt. Its matching source, dependency sources, and build recipes
+are available from the linked public source release. These third-party components
+retain their own licenses and are not restricted by Fleece's app license.
 
 Copyright 2026 Fleece. This project is source-available, not open source. The bundled LICENSE permits downloading, installing, and running an unmodified official release for lawful personal, non-commercial use. Modification, redistribution, sale, rebranding, and derivative versions remain prohibited. Third-party materials retain their own licenses.
 
